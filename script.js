@@ -1,35 +1,33 @@
-const url = "https://jsonplaceholder.typicode.com/users";
+document.addEventListener("DOMContentLoaded", function () {
+    const formreg = document.getElementById("form");
 
-document.addEventListener("DOMContentLoaded", function(e){
-    const update ={
-        nombre:'',
-        apellido :'',
-        fecha : '',
-    };
+    formreg.addEventListener('submit', function (event) {
+        event.preventDefault(); 
 
-    const btnReg = document.getElementById("btnRegistrar");
+        const nombre = document.getElementById("userName").value;
+        const apellido = document.getElementById("lastName").value;
+        const fechaDeNacimiento = document.getElementById("fechadate").value;
 
-    btnReg.addEventListener("click", function(){
-        let name = document.getElementById("userName").value;
-        let lastname = document.getElementById("lastName").value;
-        let fecha = document.getElementById("fechadate").value;
+        const update = {
+            nombre: nombre,
+            apellido: apellido,
+            fechaDeNacimiento: fechaDeNacimiento
+        };
 
-    
-        update.nombre =name;
-        update.lastname = lastname;
-        update.fecha = fecha;
-        
-    })
+        fetch("https://jsonplaceholder.typicode.com/users", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(update)
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Respuesta del servidor:", data);
 
-    fetch(url, {
-        method: 'POST',
-        Headers:{
-            'contentType':'application/json',
-        },
-        body: JSON.stringify(update),
-    })
-    .then(res => res.json())
-    .then(res => {
-        console.log(res);
+            })
+            .catch(error => {
+                console.error("Error al enviar los datos:", error);
+            });
     });
 });
